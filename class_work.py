@@ -10,24 +10,13 @@ class Animals:
 	job_value = 'неизвестно'
 	sum_weight = []
 	big_animal = {}
-	
-	def leader_animal(self):
-		sorted(sum_weight)
-		sum_weight.reverse()
 		
-		for i in self.big_animal:
-			for g in self.big_animal[i]:
-				if g == self.sum_weight[0]:
-					print(big_animal[i])
-		
-	
-	
 	def __init__(self, name, weight):
 		self.name = name
 		self.weight = weight
 		
-		self.sum_weight.append(self.weight)
-		self.big_animal.setdefault(self.name, self.weight)
+		self.add_animal_weight()
+		
 	def who_is(self):
 		if self.voice == 'Га-га-га':
 			animal = 'Гусь'	
@@ -70,6 +59,17 @@ class Animals:
 				self.weight -= self.job_weight #gramm
 			else:
 				print('Рано')
+				
+	def cycle_animal( i, l):
+		l = sorted(l)
+		l.reverse()
+		for x in i:
+			if i[x] == l[0]:
+				print('Самое тяжелое животное: ', x)
+		
+	def add_animal_weight(self):
+		self.sum_weight.append(self.weight)
+		self.big_animal.setdefault(self.name, self.weight)
 
 #Гусь		
 class Goose(Animals):
@@ -144,5 +144,8 @@ goat_1 = Goat('Копыто', 25550)
 duck_0 = Duck('Кряква', 3250)
 
 print('Общий вес животных ', sum(Animals.sum_weight))
-Animals.leader_animal(Animals.big_animal)
+#Animals.leader_animal(Animals.big_animal)
+
+Animals.cycle_animal(Animals.big_animal, Animals.sum_weight)
+
 
