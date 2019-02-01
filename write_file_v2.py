@@ -1,5 +1,4 @@
-with open('recept.txt') as f:
-	def add_cook_book():
+def add_cook_book():
 		cook_book = dict()
 		for line in f:
 			recept = line.strip()
@@ -12,7 +11,7 @@ with open('recept.txt') as f:
 			f.readline()
 		return cook_book
 		
-	def get_shop_list_by_dishes(dishes, person_count):
+def get_shop_list_by_dishes(dishes, person_count):
 		rmk = list()
 		n_rec = dict()
 		rmk = dishes
@@ -24,8 +23,6 @@ with open('recept.txt') as f:
 						j_dict = {'quantity': int(j['quantity'])  * person_count, 'measure': j['measure']}
 						n_rec.setdefault(j['ingridient_name'], j_dict)
 		print(n_rec)	
-		
-	
+
+with open('recept.txt') as f:
 	get_shop_list_by_dishes(['Фахитос', 'Омлет'],2)
-	
-			
