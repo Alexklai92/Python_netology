@@ -2,7 +2,7 @@ import time
 import requests
 import json
 
-TOKEN = '9a30726ddbbf1b0bf8748eff7822a6b3a228157badc24fdde455574b5221ede26d4756703cadc9b6cf13b' #AUTH TOKEN
+TOKEN = '' #AUTH TOKEN
 
 class User:
     def __init__(self, token, id, user):
@@ -61,24 +61,24 @@ class User:
         f_list = self.get_friends()
         self.user = user
         a = user.get_groups()['response']['items']
-        #print(f_list)
-        #print(a)
+        count = 0
         unic_group, friend_group = set(), set()
         for i in a:
             unic_group.add(i['id'])
-        #print('unic group = ', unic_group)
         for j in f_list:
             print('j = ', j)
             try:
-               for id_f in j.get_groups()['response']['items']:
-                   er = id_f
-                   print('er =', er)
-                   friend_group.add(id_f['id'])
+               a = j.get_groups()
+               print('test = ', a)
+               for id_f in a['response']['items']:
+                    friend_group.add(id_f['id'])
             except KeyError:
-                print('Key error')
-                time.sleep(1)
-                print('Ошибка 2: ', j.get_groups())
+                if a['error']['error_code'] == 6:
+                    time.sleep(1)
+                    if j.get_groups().keys() == 'response':
+                        for i in j.get_groups()['response']['items']:
+                           friend_group.add(i['id'])
 
         print(set.difference(unic_group, friend_group))
-user = User(TOKEN, 'arr_karo', True)
+user = User(TOKEN, 'eshmargunov ', True)
 user.spy_game()
