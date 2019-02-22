@@ -24,8 +24,8 @@ class User:
             'https://api.vk.com/method/users.get',
             params
         )
-        a = response.json()['response'][0]['id']
-        return a
+        result = response.json()['response'][0]['id']
+        return result
 
     def get_params(self, id):
         if type(id) == int:
@@ -57,28 +57,44 @@ class User:
             friend_list.append(a)
         return friend_list
 
-    def spy_game(self):
-        f_list = self.get_friends()
-        self.user = user
-        a = user.get_groups()['response']['items']
-        count = 0
-        unic_group, friend_group = set(), set()
-        for i in a:
-            unic_group.add(i['id'])
-        for j in f_list:
-            print('j = ', j)
-            try:
-               a = j.get_groups()
-               print('test = ', a)
-               for id_f in a['response']['items']:
-                    friend_group.add(id_f['id'])
-            except KeyError:
-                if a['error']['error_code'] == 6:
-                    time.sleep(1)
-                    if j.get_groups().keys() == 'response':
-                        for i in j.get_groups()['response']['items']:
-                           friend_group.add(i['id'])
+    def write_file(self, file, text):
+        with open(file, 'w', encoding='utf-8') as f:
+            f.write(''.join(text))
+        return ''.join(text)
 
-        print(set.difference(unic_group, friend_group))
-user = User(TOKEN, 'eshmargunov ', True)
+    def spy_game(self):
+        result_json = list()
+        f_list = self.get_friends()
+        friend_index = 0
+        self.user = user
+        user_groups = user.get_groups()['response']['items']
+        unic_group, friend_group = set(), set()
+        for u_groups in user_groups:
+            unic_group.add(u_groups['id'])
+        while friend_index < len(f_list):
+            test = f_list[friend_index].get_groups()
+            print('test =', test)
+            try:
+                for group in test['response']['items']:
+                    friend_group.add(group['id'])
+                print(f'Ходим по друзьям {friend_index + 1} из {len(f_list)}')
+                friend_index += 1
+            except KeyError:
+                print(test)
+                if test['error']['error_code'] == 6:
+                    time.sleep(1)
+                else:
+                    friend_index += 1
+        output_result = set.difference(unic_group, friend_group)
+        for value in user_groups:
+            for value_1 in output_result:
+                if value['id'] == value_1:
+                    spy_game_result = {'id': value['id'], 'name': value['name'], 'screen_name': value['screen_name']}
+                    result_json.append(spy_game_result)
+        result_json = json.dumps(result_json, ensure_ascii=False)
+
+        self.write_file('vk_groups.json', result_json)
+
+target = 'eshmargunov'
+user = User(TOKEN, target, True)
 user.spy_game()
