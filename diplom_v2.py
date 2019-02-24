@@ -80,7 +80,6 @@ class User:
         return result_json
 
     def spy_game(self):
-
         f_list = self.get_friends()
         friend_index = 0
         friend_group = set()
